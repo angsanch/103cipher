@@ -65,7 +65,7 @@ class Matrix:
                 numbers.append(Matrix(self.width - 1, self.height - 1,
                     row_col_delete(self.matrix, x, y)).det() * ((-1) ** (x + y)))
         return Matrix(self.width, self.height, numbers)
-    
+
     def trans(self):
         numbers = []
         for i in range(self.height):
@@ -75,6 +75,12 @@ class Matrix:
 
     def inverse(self):
         return self.adj() / self.det()
+
+    def to_list(self):
+        result = []
+        for i in self.matrix:
+            result += [round(j, 0) for j in i]
+        return result
 
     def __add__(self, this):
         Matrix._check_matrix(this)
@@ -106,7 +112,7 @@ class Matrix:
 
     def __truediv__(self, this):
         if isinstance(this, Matrix):
-            raise NotImplementedError("not yet implemented")
+            return self * this.inverse()
         elif not (isinstance(this, int) or isinstance(this, float)):
             raise TypeError("A matrix, a float or an int is needed")
         result = []
@@ -115,8 +121,8 @@ class Matrix:
                 result.append(self.matrix[j][i] / this)
         return Matrix(self.width, self.height, result)
 
-    def __repr__(self):
-        lines = ["\t".join([f"{j:.4f}" for j in i])
+    def __str__(self):
+        lines = ["\t".join([f"{int(j):d}" for j in i])
             for i in self.matrix]
         return "\n".join(lines)
 
