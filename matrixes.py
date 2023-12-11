@@ -25,8 +25,13 @@ class Matrix:
             self.matrix.append(numbers[width * i:width * (i + 1)])
 
     def _check_matrix(matrix):
-       if not isinstance(matrix, Matrix):
-            raise TypeError("You can only add other matrixes to a matrix")
+        if not isinstance(matrix, Matrix):
+            raise TypeError("A matrix is needed")
+
+    def _check_square(matrix):
+        Matrix._check_matrix(matrix)
+        if matrix.width != matrix.height:
+            raise ValueError("Matrixes must be square")
 
     def _check_same_size(self, matrix):
        if self.width != matrix.width or self.height != matrix.height:
@@ -35,6 +40,38 @@ class Matrix:
     def _check_mul_compatible(self, matrix):
         if self.width != matrix.height:
             raise ValueError("Incompatible matrix sizes")
+
+    def _det(matrix):
+        Matrix._check_square(matrix)
+        if matrix.width == 1:
+            return matrix.matrix[0][0]
+        elif matrix.width == 2:
+            return (matrix.matrix[0][0] * matrix.matrix[1][1]) - \
+                (matrix.matrix[0][1] * matrix.matrix[1][0])
+        det = 0
+        for x in range(matrix.width):
+                det += Matrix(matrix.width - 1, matrix.height - 1,
+                    row_col_delete(matrix.matrix, x, 0)).det() * \
+                    ((-1) ** x) * matrix.matrix[0][x]
+        return det
+
+    def det(self):
+        return (Matrix._det(self))
+
+    def adj(self):
+        numbers = []
+        for y in range(self.height):
+            for x in range(self.width):
+                numbers.append(Matrix(self.width - 1, self.height - 1,
+                    row_col_delete(self.matrix, x, y)).det())
+        return Matrix(self.width, self.height, numbers)
+
+    def trans(self):
+        numbers = []
+        for i in range(self.height):
+            for j in range(self.width):
+                numbers.append(self.matrix[j][i])
+        return Matrix(self.height, self.width, numbers)
 
     def __add__(self, this):
         Matrix._check_matrix(this)
@@ -77,3 +114,14 @@ def combine_lists(l1, l2):
     for i in range(len(l1)):
         result += l1[i] * l2[i]
     return result
+
+def row_col_delete(matrix, x, y):
+    result = []
+    for j in range(len(matrix)):
+        for i in range(len(matrix[j])):
+            if x != i and y != j:
+                result.append(matrix[j][i])
+    return result
+
+if __name__ == "__main__":
+    print(Matrix(4, 4, [1, 2, 3, 4, 5, 8, 7, 6, 9, 10, 11, 12, 13, 5, 15, 16]).adj())
