@@ -9,9 +9,24 @@
 import matrixes
 import sys
 
-def main():
-    pass
+def print_usage():
+    print("USAGE\n    ./103cipher message key flag\n")
+    print("DESCRIPTION")
+    print("    message    a message, made of ASCII characters")
+    print("    key        the encryption key, made of ASCII characters")
+    print("    flag       0 for the message to be encrypted, "
+          "1 to be decrypted")
 
+def main():
+    if len(sys.argv) != 2 and len(sys.argv) != 4:
+        raise Exception("Invalid amount of arguments")
+    if len(sys.argv) == 2 and sys.argv[1] == "-h":
+        print_usage()
+    elif sys.argv[3] == "0" or sys.argv[3] == "1":
+        pass
+    else:
+        raise Exception("Invalid arguments")
+    
 if __name__ == "__main__":
     try:
         main()
