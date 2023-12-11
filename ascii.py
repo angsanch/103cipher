@@ -1,3 +1,10 @@
+##
+## EPITECH PROJECT, 2023
+## ascii.py
+## File description:
+## convert to ascii and back
+##
+
 def str_to_ascii(string):
     result = []
     for i in string:
