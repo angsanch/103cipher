@@ -32,7 +32,8 @@ def encrypt():
         print(key_matrix)
         print()
         print("Encrypted message:")
-        print(str(message_matrix * key_matrix).replace("\n", "\t").replace("\t", " "))
+        print(str(message_matrix * key_matrix)\
+            .replace("\n", "\t").replace("\t", " "))
 
 def decrypt():
         message = [int(i) for i in sys.argv[1].split(" ")]
@@ -46,7 +47,8 @@ def decrypt():
         print(key_matrix)
         print()
         print("Decrypted message:")
-        print(ascii_helper.ascii_to_str((message_matrix * key_matrix).to_list()))
+        print(ascii_helper.ascii_to_str((message_matrix * key_matrix)\
+            .to_list()))
 
 def codec():
     if sys.argv[3] == "0":

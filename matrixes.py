@@ -63,7 +63,8 @@ class Matrix:
         for y in range(self.height):
             for x in range(self.width):
                 numbers.append(Matrix(self.width - 1, self.height - 1,
-                    row_col_delete(self.matrix, x, y)).det() * ((-1) ** (x + y)))
+                    row_col_delete(self.matrix, x, y)).det() * \
+                        ((-1) ** (x + y)))
         return Matrix(self.width, self.height, numbers)
 
     def trans(self):
