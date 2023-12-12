@@ -65,7 +65,7 @@ class Matrix:
                 numbers.append(Matrix(self.width - 1, self.height - 1,
                     row_col_delete(self.matrix, x, y)).det() * \
                         ((-1) ** (x + y)))
-        return Matrix(self.width, self.height, numbers)
+        return Matrix(self.width, self.height, numbers).trans()
 
     def trans(self):
         numbers = []
@@ -75,7 +75,7 @@ class Matrix:
         return Matrix(self.height, self.width, numbers)
 
     def inverse(self):
-        return self.adj() / self.det()
+        return self.adj().trans() / self.det()
 
     def to_list(self):
         result = []
@@ -145,4 +145,4 @@ def row_col_delete(matrix, x, y):
     return result
 
 if __name__ == "__main__":
-    print(Matrix(3, 3, [72, 111, 109, 101, 114, 32, 83, 0, 0]).inverse())
+    print(Matrix(2, 2, [1, 2, 3, 4]).adj())
