@@ -18,15 +18,20 @@ def print_usage():
     print("    flag       0 for the message to be encrypted, "
           "1 to be decrypted")
 
+def create_key(key):
+        key = ascii_helper.str_to_ascii(key)
+        key = ascii_helper.trailing_zero(key, 9)
+        return matrixes.Matrix(3, 3, key)
+
+
 def encrypt():
         message = ascii_helper.str_to_ascii(sys.argv[1])
         message = ascii_helper.trailing_zero(message,
             len(message) + 3 - (len(message) % 3))
         message_matrix = matrixes.Matrix(3, int(len(message) / 3), message)
-        key = ascii_helper.str_to_ascii(sys.argv[2])
-        key = ascii_helper.trailing_zero(key,
-            len(key) + 3 - (len(key) % 3))
-        key_matrix = matrixes.Matrix(int(len(key) / 3), 3, key)
+        key_matrix = create_key(sys.argv[2])
+        if key_matrix.det() == 0:
+            raise ValueError("The determinant of the key is 0")
 
         print("Key matrix:")
         print(key_matrix)
@@ -37,11 +42,11 @@ def encrypt():
 
 def decrypt():
         message = [int(i) for i in sys.argv[1].split(" ")]
+        message = ascii_helper.trailing_zero(message,
+            len(message) + 3 - (len(message) % 3))
+        print(message, 3, int(len(message) / 3 + 1), len(message))
         message_matrix = matrixes.Matrix(3, int(len(message) / 3), message)
-        key = ascii_helper.str_to_ascii(sys.argv[2])
-        key = ascii_helper.trailing_zero(key,
-            len(key) + 3 - (len(key) % 3))
-        key_matrix = matrixes.Matrix(int(len(key) / 3), 3, key).inverse()
+        key_matrix = create_key(sys.argv[2]).inverse()
 
         print("Key matrix:")
         print(key_matrix)
@@ -67,9 +72,8 @@ def main():
         raise Exception("Invalid arguments")
 
 if __name__ == "__main__":
-    main()
     try:
-        pass
+        main()
     except Exception as e:
         print(e, file=sys.stderr)
         exit(84)
