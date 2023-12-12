@@ -9,6 +9,7 @@
 import matrixes
 import ascii_helper
 import sys
+import math
 
 def print_usage():
     print("USAGE\n    ./103cipher message key flag\n")
@@ -20,39 +21,37 @@ def print_usage():
 
 def create_key(key):
         key = ascii_helper.str_to_ascii(key)
-        key = ascii_helper.trailing_zero(key, 9)
-        return matrixes.Matrix(3, 3, key)
-
-
-def encrypt():
-        message = ascii_helper.str_to_ascii(sys.argv[1])
-        message = ascii_helper.trailing_zero(message,
-            len(message) + 3 - (len(message) % 3))
-        message_matrix = matrixes.Matrix(3, int(len(message) / 3), message)
-        key_matrix = create_key(sys.argv[2])
+        size = math.ceil(len(key) ** 0.5)
+        key = ascii_helper.trailing_zero(key, size * size)
+        key_matrix = matrixes.Matrix(size, size, key)
         if key_matrix.det() == 0:
             raise ValueError("The determinant of the key is 0")
+        return key_matrix
+
+def create_message(message, width):
+    message = ascii_helper.trailing_zero(message, len(message) + width - (len(message) % width))
+    return matrixes.Matrix(width, int(len(message) / width), message)
+
+def encrypt():
+        key = create_key(sys.argv[2])
+        message = create_message(ascii_helper.str_to_ascii(sys.argv[1]), key.width)
 
         print("Key matrix:")
-        print(key_matrix)
+        print(key)
         print()
         print("Encrypted message:")
-        print(str(message_matrix * key_matrix)\
+        print(str(message * key)\
             .replace("\n", "\t").replace("\t", " "))
 
 def decrypt():
-        message = [int(i) for i in sys.argv[1].split(" ")]
-        message = ascii_helper.trailing_zero(message,
-            len(message) + 3 - (len(message) % 3))
-        print(message, 3, int(len(message) / 3 + 1), len(message))
-        message_matrix = matrixes.Matrix(3, int(len(message) / 3), message)
-        key_matrix = create_key(sys.argv[2]).inverse()
+        key = create_key(sys.argv[2]).inverse()
+        message = create_message([int(i) for i in sys.argv[1].split(" ")], key.width)
 
         print("Key matrix:")
-        print(key_matrix)
+        print(key)
         print()
         print("Decrypted message:")
-        print(ascii_helper.ascii_to_str((message_matrix * key_matrix)\
+        print(ascii_helper.ascii_to_str((message * key)\
             .to_list()))
 
 def codec():
