@@ -29,12 +29,14 @@ def create_key(key):
         return key_matrix
 
 def create_message(message, width):
-    message = ascii_helper.trailing_zero(message, len(message) + width - (len(message) % width))
+    message = ascii_helper.trailing_zero(message,
+        len(message) + width - (len(message) % width))
     return matrixes.Matrix(width, int(len(message) / width), message)
 
 def encrypt():
         key = create_key(sys.argv[2])
-        message = create_message(ascii_helper.str_to_ascii(sys.argv[1]), key.width)
+        message = create_message(ascii_helper.str_to_ascii(sys.argv[1]),
+            key.width)
 
         print("Key matrix:")
         print(key)
@@ -45,7 +47,8 @@ def encrypt():
 
 def decrypt():
         key = create_key(sys.argv[2]).inverse()
-        message = create_message([int(i) for i in sys.argv[1].split(" ")], key.width)
+        message = create_message([int(i) for i in sys.argv[1].split(" ")],
+            key.width)
 
         print("Key matrix:")
         print(key)
