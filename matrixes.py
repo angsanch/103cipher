@@ -132,6 +132,11 @@ class Matrix:
         return "\n".join(lines)
 
 
+def matrix_print_asf(m):
+    lines = ["\t".join([f"{j}" for j in i])
+        for i in m.matrix]
+    return "\n".join(lines)
+
 def combine_lists(l1, l2):
     if len(l1) != len(l2):
         raise IndexError("Lists need to be the same size")
