@@ -59,6 +59,8 @@ class Matrix:
         return (Matrix._det(self))
 
     def adj(self):
+        if self.width == 1 and self.height == 1:
+            return self
         numbers = []
         for y in range(self.height):
             for x in range(self.width):
@@ -75,6 +77,8 @@ class Matrix:
         return Matrix(self.height, self.width, numbers)
 
     def inverse(self):
+        if self.width == 1 and self.height == 1:
+            return (Matrix(1, 1, [1 / self.matrix[0][0]]))
         return self.adj().trans() / self.det()
 
     def to_list(self):
